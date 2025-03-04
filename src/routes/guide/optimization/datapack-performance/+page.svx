@@ -1,0 +1,26 @@
+---
+title: Datapack performance
+description: "Multiple ways to see how your datapack performs"
+---
+
+# Datapack performance
+Datapacks may affect game's performance reducing [TPS](https://minecraft.wiki/w/Tick#Game_tick). This page will go over multiple ways of measuring and analyzing your datapack's performance.
+
+## Using the debug screen
+Debug screen is a feature that shows various debugging information when you press F3. You can enable a TPS graph using F3+2 shortcut.
+
+![image of tps graph](https://minecraft.wiki/images/thumb/TPS.png/262px-TPS.png)
+
+The higher the graph, the slower the performance. Learn more on minecraft wiki: https://minecraft.wiki/w/Debug_screen#TPS_graph
+
+## Using performance metrics
+You can use the [performance metrics](https://minecraft.wiki/w/Performance_metrics) to see a more in-depth view of your datapack's performance. First you need to generate the log by pressing F3+L in singleplayer, or running `/perf start` in multiplayer. it will then take 10 seconds carefully measuring performance and saving the metrics in the log located at `.minecraft/debug/profiling/`.
+
+After you have generated the log, you can open it in the [Report inspector](https://misode.github.io/report/) tool to see the full performance metrics in detail. Unlike with the in-game TPS graph, you can see how each individual command in tick functions affects the TPS.
+
+![report inspector image](../../../../../static/page-assets/report_inspector.png)
+
+## Using benchmarking datapacks
+Benchmarking datapacks allow you to measure individual function's performance. Currently, the best benchmarking datapack is [Kragast's benchmark](https://www.planetminecraft.com/data-pack/benchmark-6443027/) due to being up-to-date and highly configurable.
+
+You can either test a single function, or test multiple chosen functions at once to compare them in real time. It is highly configurable and relatively easy to use. It works by running functions recursively as many times as possible and counting how many times the function was ran to measure it's performance. See more details and download the datapack on the official [planet minecraft page](https://www.planetminecraft.com/data-pack/benchmark-6443027/)
