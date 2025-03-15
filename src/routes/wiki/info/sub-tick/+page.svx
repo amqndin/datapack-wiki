@@ -14,6 +14,7 @@ This page assumes you are already familiar with making datapacks and raycasting
 Sub tick timing makes use of mcfunction's synchronous behaviour. Meaning that mcfunction can never run many commands at the same time, it can only run one command at a time. This allows for precise control over when commands are executed. Sub tick timings allows for using the same fake-player or storage entry for many entities in a single tick. Sub tick timings are also commonly used for referencing previous state of `@s`
 
 ## Explaination on raycast example 
+
 ### The setting
 Let's cover how sub tick timings are used in raycasting. Lets imagine a simple raycast, that upon hitting a sheep will `/kill` it's caster. 
 
@@ -35,14 +36,15 @@ kill @n[tag=raycaster]
 ```
 
 Let's say that there are a 100 armor stands and 50 sheep in the world. Every sheep is placed in a way that atleast 1 armor stand is "looking" at it. 
-
-### Explaining sub tick
-If in this current scenario we run the following command, only armor stands that were facing towards a sheep would die.
+If in this current scenario we run the following command, only the 50 armor stands that were facing towards a sheep would die.
 
 ```mcfunction
 execute as @e[type=armor_stand] run function <namespace>:raycast/start
 ```
 
-Obviously, but did you ever question ***why*** does this work? Look the raycast functions again. As you can see, it is adding a `raycaster` tag to the entity raycast is being launched from. Notice, that it then uses the same `raycaster` tag to `/kill` the caster. But we ran the same functions from all armor stands, so these commands must have worked on every armor stand, in that cause wouldn't every single armor stand have a `raycaster` tag? why did only the 50 armor stands that were looking at the sheep die?
+### Why does this work
+As you can see, in `<namespace>:raycast/start` it is adding a `raycaster` tag to the entity raycast is being launched from. Notice, that it then uses the same `raycaster` tag to `/kill` the caster.
 
-This is all happening due to previously mentioned synchronous behaviour of mcfunction, *nothing* in mcfunction is ran at the same time, that applies to everything in mcfunction. This is the reason why the raycast tackles 1 entity at a time, throughout the entire tick of running raycast from all the armor stands, it ran an individual raycast from each armor stand 1 by 1, so each of the 100 armor stands was given a `raycaster` tag and then removed that tag, all in a single tick.
+Even though we ran the same functions from every armor stand, added the same tag to each armor stand, then used the same tag to only get rid of those who were facing towards a sheep. 
+
+This is possible due to previously mentioned synchronous behaviour of mcfunction. Since mcfunction can never run more than 1 command at a time, raycast tackles each entity one at a time. So, it added and removed the `raycaster` tag to each armor stand one at a time, in order, in less than a tick.
